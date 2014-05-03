@@ -1,8 +1,13 @@
 #!/bin/bash
 
 NAME="testproject"
-GIT_URL="https://github.com/sosedoff/opentable.git"
+GIT_URL=$1
 PROJECT_PATH="/project"
+
+if [ -z $GIT_URL ]; then
+  echo "Git url required"
+  exit 1
+fi
 
 # Remove an existing container first
 docker rm $NAME > /dev/null
