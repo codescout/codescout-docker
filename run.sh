@@ -2,6 +2,7 @@
 
 NAME="testproject"
 GIT_URL=$1
+GIT_SHA=$2
 PROJECT_PATH="/project"
 
 if [ -z $GIT_URL ]; then
@@ -9,11 +10,15 @@ if [ -z $GIT_URL ]; then
   exit 1
 fi
 
+if [ -z $GIT_SHA ] ; then
+  GIT_SHA="master"
+fi
+
 # Remove an existing container first
 docker rm $NAME > /dev/null
 
 # Clone repo to the next container
-docker run --name=$NAME codecheck/codecheck git clone $GIT_URL $PROJECT_PATH
+docker run --name=$NAME codecheck git clone $GIT_URL $PROJECT_PATH
 
 # Commit container with cloned repo
 IMAGE_ID=$(docker commit $NAME)
