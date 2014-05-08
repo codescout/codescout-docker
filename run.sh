@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 NAME="testproject"
 GIT_URL=$1
 GIT_SHA=$2
