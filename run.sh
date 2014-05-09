@@ -26,10 +26,10 @@ docker run --name=$NAME codecheck git clone $GIT_URL $PROJECT_PATH
 IMAGE_ID=$(docker commit $NAME)
 
 # Execute metrics
-docker run --rm=true $IMAGE_ID sandi_meter -d -p $PROJECT_PATH
-docker run --rm=true $IMAGE_ID brakeman $PROJECT_PATH
-docker run --rm=true $IMAGE_ID flog --19 -q -g $PROJECT_PATH
-docker run --rm=true $IMAGE_ID rails_best_practices $PROJECT_PATH
+docker run --rm=true $IMAGE_ID sandi_meter -d -p --json $PROJECT_PATH > sandi_meter.json
+docker run --rm=true $IMAGE_ID brakeman --format json $PROJECT_PATH > brakeman.json
+docker run --rm=true $IMAGE_ID flog --json --19 -q -g $PROJECT_PATH > flog.json
+docker run --rm=true $IMAGE_ID rails_best_practices --format json $PROJECT_PATH > rails_best_practices.json
 
 # Remove image
 docker rmi $IMAGE_ID

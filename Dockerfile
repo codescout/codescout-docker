@@ -55,10 +55,6 @@ RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
 RUN gem update --system && gem install bundler
 
 RUN gem install sandi_meter \
-                simplecov \
                 flog \
-                cane \
                 brakeman \
-                ruby-lint \
-                rubocop \
                 rails_best_practices
