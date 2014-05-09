@@ -52,9 +52,9 @@ RUN git clone https://github.com/sstephenson/ruby-build.git && \
     rm -rf ./ruby-build
 
 RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
-RUN gem update --system && gem install bundler
 
-RUN gem install brakeman
+RUN gem update --system
+RUN gem install bundler brakeman dependenci
 
 RUN git clone https://github.com/railsbp/rails_best_practices && \
     cd rails_best_practices && \

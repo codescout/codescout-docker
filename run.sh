@@ -18,7 +18,7 @@ fi
 docker rm $NAME > /dev/null
 
 # Clone repo to the next container
-docker run --name=$NAME codecheck git clone $GIT_URL $PROJECT_PATH
+docker run --name=$NAME codescout git clone $GIT_URL $PROJECT_PATH
 
 # Commit container with cloned repo
 IMAGE_ID=$(docker commit $NAME)
@@ -28,6 +28,7 @@ docker run --rm=true $IMAGE_ID sandi_meter -d --json -p $PROJECT_PATH
 docker run --rm=true $IMAGE_ID brakeman --format json $PROJECT_PATH
 docker run --rm=true $IMAGE_ID flog --json --19 -q -g $PROJECT_PATH
 docker run --rm=true $IMAGE_ID rails_best_practices --format json $PROJECT_PATH
+docker run --rm=true $IMAGE_ID dependenci --json $PROJECT_PATH
 
 # Remove image
 docker rmi $IMAGE_ID
