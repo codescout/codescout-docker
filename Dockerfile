@@ -54,14 +54,17 @@ RUN git clone https://github.com/sstephenson/ruby-build.git && \
 RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
 RUN gem update --system && gem install bundler
 
+RUN gem install brakeman
+
 RUN git clone https://github.com/railsbp/rails_best_practices && \
     cd rails_best_practices && \
-    bundle install && rake install && \
+    bundle install && \
+    rake build && gem install rails_best_practices-1.15.3.gem && \
     rm -rf /rails_best_practices
 
-RUN git clone https://github.com/sosedoff/flog.git && \
+RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     cd flog && \
-    gem install hoe && rake install_gem && \
+    gem install hoe && rake gem && gem install pkg/flog-4.2.0.gem && \
     rm -rf /flog
 
 RUN git clone https://github.com/sosedoff/sandi_meter && \
@@ -69,5 +72,3 @@ RUN git clone https://github.com/sosedoff/sandi_meter && \
     rake -T && rake build && \
     gem install /sandi_meter/pkg/sandi_meter-1.1.5.gem && \
     rm -rf /sandi_meter
-
-RUN gem install brakeman
