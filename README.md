@@ -28,17 +28,11 @@ cd /codecheck
 Build docker images for code checks:
 
 ```
-./build.sh
+docker build -t codescout .
 ```
 
 This could take up to 10-15 minutes
 
 ## Usage
 
-Run code check for a public repo:
-
-```
-./run https://github.com/discourse/discourse
-```
-
-More to come
+TODO
