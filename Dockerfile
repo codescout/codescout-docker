@@ -66,3 +66,5 @@ RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     cd flog && \
     gem install hoe && rake gem && gem install pkg/flog-4.2.0.gem && \
     rm -rf /flog
+
+ADD codescout /usr/local/bin/codescout

@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+def require_variable(name)
+  if ENV[name].nil?
+    STDERR.puts("#{name} variable is not defined")
+    exit(1)
+  end
+end
+
+def require_variables(*names)
+  names.each { |name| require_variable(name) }
+end
+
+def run(command)
+  output = `#{command}`
+  
+  $?.exitstatus == 0
+end
+
+def send_report(reporter, path)
+  url = "http://#{ENV["CODESCOUT_HOST"]}/receive"
+  url << "?token=#{ENV["CODESCOUT_TOKEN"]}"
+  url << "&reporter=#{reporter}"
+
+  run("curl -X POST \"#{url}\" -d @#{path}")
+end
+
+require_variables(
+  "CODESCOUT_TOKEN",
+  "CODESCOUT_REPO",
+  "CODESCOUT_BRANCH",
+  "CODESCOUT_COMMIT"
+)
+
+path   = "/repository"
+repo   = ENV["CODESCOUT_REPO"]
+branch = ENV["CODESCOUT_BRANCH"]
+commit = ENV["CODESCOUT_COMMIT"]
+
+run("git clone --quiet --depth=50 --branch #{branch} #{repo} #{path}")
+Dir.chdir(path)
+run("git checkout -qf #{commit}")
+
+run("sandi_meter -d --json -p . > sandi_meter.json")
+run("brakeman --no-progress --format=json . > brakeman.json")
+run("flog --json --19 -q -g . > flog.json")
+run("rails_best_practices --format json .")
+run("dependenci --json . > dependenci.json")
+
+send_report("sandi_meter", "sandi_meter.json")
+send_report("brakeman", "brakeman.json")
+send_report("flog", "flog.json")
+send_report("rails_best_practices", "rails_best_practices_output.json")
+send_report("dependenci", "dependenci.json")
