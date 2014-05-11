@@ -1,12 +1,12 @@
-# codecheck
+# codescout-env
 
-Docker-based environment with Ruby code analysis tools
+Docker-based environment for CodeScout
 
 ## Requirements
 
 - Ubuntu 12.04
 - Docker
-- Vagrant
+- Vagrant (for local development)
 
 ## Installation
 
@@ -16,23 +16,8 @@ Make sure you have latest Vagrant installed. Clone repository and start VM:
 vagrant up
 ```
 
-VM will be automatically provisioned. Takes just a few minutes.
-
-Connect to VM and switch to /codecheck directory:
+After VM is started and provisioned, connect via SSH:
 
 ```
 vagrant ssh
-cd /codecheck
 ```
-
-Build docker images for code checks:
-
-```
-docker build -t codescout .
-```
-
-This could take up to 10-15 minutes
-
-## Usage
-
-TODO
