@@ -1,54 +1,99 @@
 #!/usr/bin/env ruby
 
-def require_variable(name)
-  if ENV[name].nil?
-    STDERR.puts("#{name} variable is not defined")
-    exit(1)
+require "optparse"
+require "faraday"
+
+class CodeScout
+  def initialize(options = {})
+    @path   = "/tmp/project"
+    @host   = options[:host]
+    @token  = options[:token]
+    @repo   = options[:repository]
+    @branch = options[:branch]
+    @commit = options[:commit]
+  end
+
+  def execute
+    clone_repository
+
+    Dir.chdir(@path) do
+      checkout_commit
+      generate_reports
+      submit_reports
+    end
+  end
+
+  def clone_repository
+    run("git clone --quiet --depth=50 --branch #{@branch} #{@repo} #{@path}")
+  end
+
+  def checkout_commit
+    run("git checkout -qf #{@commit}")
+  end
+
+  def generate_reports
+    run("sandi_meter -d --json -p . > sandi_meter.json")
+    run("brakeman --no-progress --format=json . > brakeman.json")
+    run("flog --json --19 -q -g . > flog.json")
+    run("rails_best_practices --format json .")
+    run("dependenci --json . > dependenci.json")
+  end
+
+  def submit_reports
+    submit_report("sandi_meter", "sandi_meter.json")
+    submit_report("brakeman", "brakeman.json")
+    submit_report("flog", "flog.json")
+    submit_report("rails_best_practices", "rails_best_practices_output.json")
+    submit_report("dependenci", "dependenci.json")
+  end
+
+  private
+
+  def run(command)
+    output = `#{command}`
+    $?.exitstatus == 0
+  end
+
+  def submit_report(reporter, path)
+    run("curl -X POST \"#{submit_url(reporter)}\" -d @#{path}")
+  end
+
+  def submit_url(reporter)
+    "http://#{@host}/receive?token=#{@token}&reporter=#{reporter}"
   end
 end
 
-def require_variables(*names)
-  names.each { |name| require_variable(name) }
+# ------------------------------------------------------------------------------
+
+options = {}
+
+optsparse = OptionParser.new do |opts|
+  opts.on("--host HOST", "Hostname") do |val|
+    options[:host] = val
+  end
+ 
+  opts.on("--token TOKEN", "Project token") do |val|
+    options[:token] = val
+  end
+ 
+  opts.on("--repository URL", "Git repository URL") do |val|
+    options[:repository] = val
+  end
+ 
+  opts.on("--branch NAME", "Git branch") do |val|
+    options[:branch] = val
+  end
+ 
+  opts.on("--commit SHA", "Git commit") do |val|
+    options[:commit] = val
+  end
+ 
+  opts.parse!
 end
 
-def run(command)
-  output = `#{command}`
-  
-  $?.exitstatus == 0
+if options.empty?
+  STDOUT.puts(optsparse)
+  exit 1
 end
 
-def send_report(reporter, path)
-  url = "http://#{ENV["CODESCOUT_HOST"]}/receive"
-  url << "?token=#{ENV["CODESCOUT_TOKEN"]}"
-  url << "&reporter=#{reporter}"
-
-  run("curl -X POST \"#{url}\" -d @#{path}")
-end
-
-require_variables(
-  "CODESCOUT_TOKEN",
-  "CODESCOUT_REPO",
-  "CODESCOUT_BRANCH",
-  "CODESCOUT_COMMIT"
-)
-
-path   = "/repository"
-repo   = ENV["CODESCOUT_REPO"]
-branch = ENV["CODESCOUT_BRANCH"]
-commit = ENV["CODESCOUT_COMMIT"]
-
-run("git clone --quiet --depth=50 --branch #{branch} #{repo} #{path}")
-Dir.chdir(path)
-run("git checkout -qf #{commit}")
-
-run("sandi_meter -d --json -p . > sandi_meter.json")
-run("brakeman --no-progress --format=json . > brakeman.json")
-run("flog --json --19 -q -g . > flog.json")
-run("rails_best_practices --format json .")
-run("dependenci --json . > dependenci.json")
-
-send_report("sandi_meter", "sandi_meter.json")
-send_report("brakeman", "brakeman.json")
-send_report("flog", "flog.json")
-send_report("rails_best_practices", "rails_best_practices_output.json")
-send_report("dependenci", "dependenci.json")
+CodeScout.new(options).execute
