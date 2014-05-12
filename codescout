@@ -59,7 +59,7 @@ class CodeScout
   end
 
   def submit_url(reporter)
-    "http://#{@host}/receive?token=#{@token}&reporter=#{reporter}"
+    "http://#{@host}/receive?token=#{@token}&push_id=#{@push_id}&reporter=#{reporter}"
   end
 end
 
@@ -75,6 +75,10 @@ optsparse = OptionParser.new do |opts|
   opts.on("--token TOKEN", "Project token") do |val|
     options[:token] = val
   end
+
+  opts.on("--push ID", "Project push ID") do |val|
+    options[:push] = val
+  emd
  
   opts.on("--repository URL", "Git repository URL") do |val|
     options[:repository] = val
