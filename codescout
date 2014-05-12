@@ -5,12 +5,13 @@ require "faraday"
 
 class CodeScout
   def initialize(options = {})
-    @path   = "/tmp/project"
-    @host   = options[:host]
-    @token  = options[:token]
-    @repo   = options[:repository]
-    @branch = options[:branch]
-    @commit = options[:commit]
+    @path    = "/tmp/project"
+    @push_id = options[:push]
+    @host    = options[:host]
+    @token   = options[:token]
+    @repo    = options[:repository]
+    @branch  = options[:branch]
+    @commit  = options[:commit]
   end
 
   def execute
@@ -78,7 +79,7 @@ optsparse = OptionParser.new do |opts|
 
   opts.on("--push ID", "Project push ID") do |val|
     options[:push] = val
-  emd
+  end
  
   opts.on("--repository URL", "Git repository URL") do |val|
     options[:repository] = val
