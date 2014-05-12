@@ -53,13 +53,11 @@ RUN git clone https://github.com/sstephenson/ruby-build.git && \
 RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
 
 RUN gem update --system
-RUN gem install bundler brakeman dependenci sandi_meter
-
-RUN git clone https://github.com/railsbp/rails_best_practices && \
-    cd rails_best_practices && \
-    bundle install && \
-    rake build && gem install pkg/rails_best_practices-1.15.3.gem && \
-    rm -rf /rails_best_practices
+RUN gem install bundler \
+                brakeman \
+                dependenci \
+                sandi_meter \
+                rails_best_practices
 
 RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     cd flog && \
