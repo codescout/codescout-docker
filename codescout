@@ -2,6 +2,7 @@
 
 require "optparse"
 require "faraday"
+require "json"
 
 class CodeScout
   def initialize(options = {})
@@ -15,8 +16,9 @@ class CodeScout
   end
 
   def execute
+    fetch_access_key
     clone_repository
-
+    
     Dir.chdir(@path) do
       checkout_commit
       generate_reports
@@ -25,7 +27,9 @@ class CodeScout
   end
 
   def clone_repository
-    run("git clone --quiet --depth=50 --branch #{@branch} #{@repo} #{@path}")
+    unless run("git clone --quiet --depth=50 --branch #{@branch} #{@repo} #{@path}")
+      raise "Unable to clone repository!"
+    end
   end
 
   def checkout_commit
@@ -46,6 +50,23 @@ class CodeScout
     submit_report("flog", "flog.json")
     submit_report("rails_best_practices", "rails_best_practices_output.json")
     submit_report("dependenci", "dependenci.json")
+  end
+
+  def fetch_access_key
+    url = "http://#{@host}/api/v1/access_keys?token=#{@token}"
+    response = Faraday.get(url)
+
+    if response.success?
+      key = JSON.load(response.body).first
+      install_access_key(key)
+    else
+      raise "Unable to fetch access keys!"
+    end
+  end
+
+  def install_access_key(key)
+    File.open("/root/.ssh/id_rsa", "w")     { |f| f.write(key["private_key"]) }
+    File.open("/root/.ssh/id_rsa.pub", "w") { |f| f.write(key["ssh_public_key"]) }
   end
 
   private

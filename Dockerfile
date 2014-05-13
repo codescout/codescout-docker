@@ -66,9 +66,11 @@ RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
 
 ADD codescout /usr/local/bin/codescout
 
-RUN mkdir -p ~/.ssh && \
-    touch ~/.ssh/authorized_keys && \
-    touch ~/.ssh/id_rsa && \
-    touch ~/.ssh/id_rsa.pub && \
-    chmod 700 ~/.ssh && \
-    chmod 600 ~/.ssh/*
+RUN mkdir -p /root/.ssh && \
+    touch /root/.ssh/authorized_keys && \
+    touch /root/.ssh/id_rsa && \
+    touch /root/.ssh/id_rsa.pub && \
+    chmod 700 /root/.ssh && \
+    chmod 600 /root/.ssh/*
+
+ADD ./ssh_config /root/.ssh/config
