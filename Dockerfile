@@ -4,8 +4,9 @@ MAINTAINER Dan Sosedoff "dan@doejo.com"
 RUN apt-get update
 
 RUN echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
-RUN locale-gen en_US.UTF-8
-RUN update-locale LANG=en_US.UTF-8
+
+RUN locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8
 
 RUN apt-get install -y \
   wget \
@@ -17,6 +18,7 @@ RUN apt-get install -y \
   build-essential \
   checkinstall \
   openssl \
+  sqlite3 \
   ncurses-dev \
   zlib1g \
   zlib1g-dev \
@@ -34,10 +36,7 @@ RUN apt-get install -y \
   libxml2-dev \
   libxslt-dev \
   libxslt1-dev \
-  libyaml-dev
-
-RUN apt-get install -y \
-  sqlite3 \
+  libyaml-dev \
   libmysqlclient-dev \
   libpq-dev \
   libsqlite3-dev \
@@ -48,11 +47,13 @@ RUN apt-get install -y \
 
 RUN git clone https://github.com/sstephenson/ruby-build.git && \
     ./ruby-build/bin/ruby-build "2.1.1" "/usr/local" && \
-    rm -rf ./ruby-build
+    rm -rf ./ruby-build && \
+    rm /tmp/ruby-build*
 
 RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
 
 RUN gem update --system
+
 RUN gem install bundler \
                 brakeman \
                 dependenci \
@@ -64,7 +65,7 @@ RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     gem install hoe && rake gem && gem install pkg/flog-4.2.0.gem && \
     rm -rf /flog
 
-ADD codescout /usr/local/bin/codescout
+ADD data/codescout /usr/local/bin/codescout
 
 RUN mkdir -p /root/.ssh && \
     touch /root/.ssh/authorized_keys && \
@@ -73,4 +74,4 @@ RUN mkdir -p /root/.ssh && \
     chmod 700 /root/.ssh && \
     chmod 600 /root/.ssh/*
 
-ADD ./ssh_config /root/.ssh/config
+ADD data/ssh_config /root/.ssh/config
