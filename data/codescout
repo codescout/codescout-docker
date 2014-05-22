@@ -21,6 +21,7 @@ class CodeScout
     
     Dir.chdir(@path) do
       checkout_commit
+      prepare_configs
       generate_reports
       submit_reports
     end
@@ -34,6 +35,11 @@ class CodeScout
 
   def checkout_commit
     run("git checkout -qf #{@commit}")
+  end
+
+  def prepare_configs
+    run("mkdir -p config/")
+    run("cp /etc/rails_best_practices.yml config/")
   end
 
   def generate_reports
