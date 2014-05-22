@@ -65,8 +65,10 @@ RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     gem install hoe && rake gem && gem install pkg/flog-4.2.0.gem && \
     rm -rf /flog
 
+# Adds main reporter script
 ADD data/codescout /usr/local/bin/codescout
 
+# Needed to install identity keys for private projects
 RUN mkdir -p /root/.ssh && \
     touch /root/.ssh/authorized_keys && \
     touch /root/.ssh/id_rsa && \
@@ -74,4 +76,9 @@ RUN mkdir -p /root/.ssh && \
     chmod 700 /root/.ssh && \
     chmod 600 /root/.ssh/*
 
+# SSH config is needed to skip console prompt when cloning repository for the
+# first time. Not the best way of doing it, but its ok for now.
 ADD data/ssh_config /root/.ssh/config
+
+# Add default config with a few small modifications
+ADD data/rails_best_practices.yml /etc/rails_best_practices.yml
