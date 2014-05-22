@@ -39,7 +39,7 @@ class CodeScout
   def generate_reports
     run("sandi_meter -d --json -p . > sandi_meter.json")
     run("brakeman --no-progress --format=json . > brakeman.json")
-    run("flog --json --19 -q -g . > flog.json")
+    run("flog --json --19 -q -g app lib > flog.json")
     run("rails_best_practices --format json .")
     run("dependenci --json . > dependenci.json")
   end
