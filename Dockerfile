@@ -1,56 +1,17 @@
 FROM ubuntu:12.04
 MAINTAINER Dan Sosedoff "dan@doejo.com"
 
-RUN apt-get update
-
 RUN echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 
-RUN locale-gen en_US.UTF-8 && \
-    update-locale LANG=en_US.UTF-8
+RUN apt-get update
+RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
+RUN apt-get install -y wget curl git-core python-software-properties
 
-RUN apt-get install -y \
-  wget \
-  curl \
-  git-core \
-  autoconf \
-  binutils \
-  bison \
-  build-essential \
-  checkinstall \
-  openssl \
-  sqlite3 \
-  ncurses-dev \
-  zlib1g \
-  zlib1g-dev \
-  libssl1.0.0 \
-  libssl-dev \
-  libcurl4-openssl-dev \
-  libffi-dev \
-  libgdbm-dev \
-  libicu-dev \
-  libncurses5-dev \
-  libreadline-dev \
-  libreadline6-dev \
-  libssl-dev \
-  libxml2 \
-  libxml2-dev \
-  libxslt-dev \
-  libxslt1-dev \
-  libyaml-dev \
-  libmysqlclient-dev \
-  libpq-dev \
-  libsqlite3-dev \
-  libqt4-dev \
-  freetds-dev \
-  freetds-bin \
-  libfontconfig1
+RUN apt-add-repository ppa:brightbox/ruby-ng && \
+    apt-get update && \
+    apt-get install -y ruby2.1 ruby2.1-dev
 
-RUN git clone https://github.com/sstephenson/ruby-build.git && \
-    ./ruby-build/bin/ruby-build "2.1.1" "/usr/local" && \
-    rm -rf ./ruby-build && \
-    rm /tmp/ruby-build*
-
-RUN echo "gem: --no-rdoc --no-ri" >> /usr/local/etc/gemrc
+RUN echo 'gem: --no-rdoc --no-ri' > /etc/gemrc
 
 RUN gem update --system
 
