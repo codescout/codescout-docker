@@ -19,7 +19,8 @@ RUN gem install bundler \
                 brakeman \
                 dependenci \
                 sandi_meter \
-                rails_best_practices
+                rails_best_practices \
+                rubocop
 
 RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
     cd flog && \
