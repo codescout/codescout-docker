@@ -16,9 +16,10 @@ Make sure you have latest Vagrant installed. Clone repository and start VM:
 vagrant up
 ```
 
-After VM is started and provisioned, connect via SSH:
+After VM is started and provisioned, restart VM and connect via SSH:
 
 ```
+vagrant reload
 vagrant ssh
 ```
 
