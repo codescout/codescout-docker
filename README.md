@@ -8,6 +8,16 @@ Docker-based environment for CodeScout
 - Docker
 - Vagrant (for local development)
 
+## Environment
+
+- Ruby 2.1
+- Flog
+- Rails Best Practices
+- Rubocop
+- Brakeman
+- Sandi Meter
+- Dependenci
+
 ## Installation
 
 Make sure you have latest Vagrant installed. Clone repository and start VM:
