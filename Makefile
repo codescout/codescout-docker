@@ -7,6 +7,9 @@ test:
 tag:
 	docker tag codescout sosedoff/codescout
 
+release:
+	docker push sosedoff/codescout
+
 clean:
 	docker stop $(docker ps -a -q) ; echo
 	docker rm $(docker ps -a -q) ; echo
