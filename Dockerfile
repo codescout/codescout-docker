@@ -1,11 +1,11 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER Dan Sosedoff "dan@doejo.com"
 
 RUN echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 
 RUN apt-get update
 RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
-RUN apt-get install -y wget curl git-core python-software-properties
+RUN apt-get install -y wget curl git-core software-properties-common
 
 RUN apt-add-repository ppa:brightbox/ruby-ng && \
     apt-get update && \
