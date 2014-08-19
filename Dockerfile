@@ -16,19 +16,10 @@ RUN echo 'gem: --no-rdoc --no-ri' > /etc/gemrc
 RUN gem update --system
 
 RUN gem install bundler \
+                flog \
+                flay \
                 brakeman \
-                dependenci \
-                sandi_meter \
-                rails_best_practices \
-                rubocop
-
-RUN git clone -b json-output https://github.com/sosedoff/flog.git && \
-    cd flog && \
-    gem install hoe && rake gem && gem install pkg/flog-4.2.0.gem && \
-    rm -rf /flog
-
-# Adds main reporter script
-ADD data/codescout /usr/local/bin/codescout
+                roodi
 
 # Needed to install identity keys for private projects
 RUN mkdir -p /root/.ssh && \
