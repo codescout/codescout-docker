@@ -15,11 +15,11 @@ RUN echo 'gem: --no-rdoc --no-ri' > /etc/gemrc
 
 RUN gem update --system
 
-RUN gem install bundler \
-                flog \
-                flay \
-                brakeman \
-                roodi
+
+RUN wget https://dl.dropboxusercontent.com/u/486271/codescout-0.0.1.gem
+
+RUN gem install ./codescout-0.0.1.gem && \
+    rm ./codescout-0.0.1.gem
 
 # Needed to install identity keys for private projects
 RUN mkdir -p /root/.ssh && \
@@ -32,6 +32,3 @@ RUN mkdir -p /root/.ssh && \
 # SSH config is needed to skip console prompt when cloning repository for the
 # first time. Not the best way of doing it, but its ok for now.
 ADD data/ssh_config /root/.ssh/config
-
-# Add default config with a few small modifications
-ADD data/rails_best_practices.yml /etc/rails_best_practices.yml
