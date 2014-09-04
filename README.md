@@ -4,19 +4,8 @@ Docker-based environment for CodeScout
 
 ## Requirements
 
-- Ubuntu 12.04
+- Vagrant
 - Docker
-- Vagrant (for local development)
-
-## Environment
-
-- Ruby 2.1
-- Flog
-- Rails Best Practices
-- Rubocop
-- Brakeman
-- Sandi Meter
-- Dependenci
 
 ## Installation
 
@@ -36,11 +25,12 @@ vagrant ssh
 ## Usage
 
 ```
-make build   - Build image without cache and remove intermediate containers
-make test    - Start a new shell session from built image
-make tag     - Tag a new image for release
-make release - Push image to docker index
-make clean   - Remove image and all containers
+make build       - Fast image build (using cache)
+make build_clean - Build image without cache and remove intermediate containers
+make test        - Start a new shell session from built image
+make tag         - Tag a new image for release
+make release     - Push image to docker index
+make clean       - Remove image and all containers
 ```
 
 ## License
