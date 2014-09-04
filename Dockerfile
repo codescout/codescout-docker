@@ -11,15 +11,25 @@ RUN apt-add-repository ppa:brightbox/ruby-ng && \
     apt-get update && \
     apt-get install -y ruby2.1 ruby2.1-dev
 
-RUN echo 'gem: --no-rdoc --no-ri' > /etc/gemrc
+RUN echo "gem: --no-rdoc --no-ri" > /etc/gemrc
 
 RUN gem update --system
+RUN gem install bundler
 
+# Install codescout gems
+RUN git clone https://github.com/codescout/codescout-analyzer.git && \
+    cd codescout-analyzer && \
+    rake build && \
+    gem install pkg/codescout-analyzer-0.0.1.gem && \
+    cd .. && \
+    rm -rf codescout-analyzer
 
-RUN wget https://dl.dropboxusercontent.com/u/486271/codescout-0.0.1.gem
-
-RUN gem install ./codescout-0.0.1.gem && \
-    rm ./codescout-0.0.1.gem
+RUN git clone https://github.com/codescout/codescout-runner.git && \
+    cd codescout-runner && \
+    rake build && \
+    gem install pkg/codescout-runner-0.1.0.gem && \
+    cd .. && \
+    rm -rf codescout-runner
 
 # Needed to install identity keys for private projects
 RUN mkdir -p /root/.ssh && \

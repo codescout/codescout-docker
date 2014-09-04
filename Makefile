@@ -1,4 +1,7 @@
 build:
+	docker build -t codescout .
+
+build_clean:
 	docker build --no-cache=true --rm=true -t codescout .
 
 test:
