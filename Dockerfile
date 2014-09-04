@@ -1,6 +1,10 @@
 FROM ubuntu:14.04
 MAINTAINER Dan Sosedoff "dan@doejo.com"
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
 RUN echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 
 RUN apt-get update
