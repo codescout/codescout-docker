@@ -31,7 +31,7 @@ RUN git clone https://github.com/codescout/codescout-analyzer.git && \
 RUN git clone https://github.com/codescout/codescout-runner.git && \
     cd codescout-runner && \
     rake build && \
-    gem install pkg/codescout-runner-0.1.0.gem && \
+    gem install pkg/codescout-runner-0.0.1.gem && \
     cd .. && \
     rm -rf codescout-runner
 
