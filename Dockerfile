@@ -46,3 +46,6 @@ RUN mkdir -p /root/.ssh && \
 # SSH config is needed to skip console prompt when cloning repository for the
 # first time. Not the best way of doing it, but its ok for now.
 ADD data/ssh_config /root/.ssh/config
+
+ENV HOME /root
+WORKDIR /root
