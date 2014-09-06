@@ -1,11 +1,11 @@
 build:
-	docker build -t codescout .
+	docker build -t sosedoff/codescout .
 
 build_clean:
-	docker build --no-cache=true --rm=true -t codescout .
+	docker build --no-cache=true --rm=true -t sosedoff/codescout .
 
 test:
-	docker run -i -t codescout /bin/bash
+	docker run -i -t sosedoff/codescout /bin/bash
 
 tag:
 	docker tag codescout sosedoff/codescout
