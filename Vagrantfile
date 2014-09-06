@@ -15,6 +15,6 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./", "/dockerfiles"
   config.vm.provision "shell", inline: $script
   config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
+    v.memory = 1024
   end
 end
