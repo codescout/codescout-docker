@@ -38,3 +38,6 @@ ENV HOME /root
 
 # Default working directory is "/" by default
 WORKDIR /root
+
+# Set default command
+CMD ["codescout-runner"]
