@@ -5,6 +5,13 @@ apt-get install -y git-core
 apt-get install -y ruby1.9.3
 curl -s https://get.docker.io/ubuntu/ | sudo sh
 date > /etc/vagrant_provisioned_at
+
+# Map docker to tcp port
+echo 'DOCKER_OPTS="-H tcp://192.168.33.10:5555"' >> /etc/default/docker
+
+# Specify docker host for vagrant and root users
+echo "export DOCKER_HOST=tcp://192.168.33.10:5555" >> /root/.bashrc
+echo "export DOCKER_HOST=tcp://192.168.33.10:5555" >> /home/vagrant/.bashrc
 SCRIPT
 
 Vagrant.configure("2") do |config|
