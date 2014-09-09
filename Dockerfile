@@ -11,6 +11,7 @@ RUN apt-get update
 RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
 RUN apt-get install -y wget curl git-core software-properties-common
 
+# Install Ruby 2.1 from Brightbox repository
 RUN apt-add-repository ppa:brightbox/ruby-ng && \
     apt-get update && \
     apt-get install -y ruby2.1 ruby2.1-dev
@@ -18,7 +19,7 @@ RUN apt-add-repository ppa:brightbox/ruby-ng && \
 RUN echo "gem: --no-rdoc --no-ri" > /etc/gemrc
 RUN gem update --system
 
-
+# Install code scout runner library
 RUN gem install codescout-runner
 
 # Needed to install identity keys for private projects
@@ -31,7 +32,7 @@ RUN mkdir -p /root/.ssh && \
 
 # SSH config is needed to skip console prompt when cloning repository for the
 # first time. Not the best way of doing it, but its ok for now.
-ADD data/ssh_config /root/.ssh/config
+ADD config/ssh_config /root/.ssh/config
 
 # HOME env variable is not set by default
 ENV HOME /root
