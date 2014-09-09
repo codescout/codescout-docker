@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
   config.vm.network :private_network, ip: "192.168.33.10"
   #config.vm.network :public_network
-  config.vm.synced_folder "./", "/dockerfiles"
+  config.vm.synced_folder "./", "/codescout"
   config.vm.provision "shell", inline: $script
   config.vm.provider "virtualbox" do |v|
     v.memory = 1024

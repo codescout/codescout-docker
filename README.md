@@ -15,14 +15,22 @@ Make sure you have latest Vagrant installed. Clone repository and start VM:
 vagrant up
 ```
 
-After VM is started and provisioned, restart VM and connect via SSH:
+After VM is created an provisioned make sure to reload the box:
 
 ```
 vagrant reload
-vagrant ssh
 ```
 
 ## Usage
+
+Connect to the VM via SSH and change directory:
+
+```
+vagrant ssh
+cd /codescout
+```
+
+Use the following commands to build and test docker image:
 
 ```
 make build       - Fast image build (using cache)
